@@ -1,0 +1,25 @@
+{
+  "name": "rust-gpu-compute-guide",
+  "owner": {
+    "name": "WeykonK",
+    "email": "weykon@example.com"
+  },
+  "metadata": {
+    "description": "Rust GPU Compute Development Guide — write GPU-accelerated Rust code with proper patterns and awareness of GPU-specific constraints",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "rust-gpu-compute",
+      "description": "Helps developers write GPU-accelerated Rust code with proper patterns. Covers: branch divergence, memory transfer costs, Rust limitations on GPU (no heap allocation/recursion), memory coalescing, and GPU vs CPU场景选择. Based on VectorWare runtime model and WGSL best practices. Use for: boid simulation, particle systems, data-parallel processing, scientific computing, image processing, ML inference on GPU with Rust.",
+      "version": "0.1.0",
+      "source": "./",
+      "author": {
+        "name": "WeykonK"
+      },
+      "skills": [
+        "./SKILL.md"
+      ]
+    }
+  ]
+}
