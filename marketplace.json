@@ -1,24 +1,42 @@
 {
   "name": "rust-gpu-compute-guide",
   "owner": {
-    "name": "WeykonK",
-    "email": "weykon@example.com"
+    "name": "WeykonK"
   },
   "metadata": {
-    "description": "Rust GPU Compute Development Guide — write GPU-accelerated Rust code with proper patterns and awareness of GPU-specific constraints",
+    "description": "Compatibility copy of the marketplace manifest. The canonical marketplace file lives at .claude-plugin/marketplace.json.",
     "version": "0.1.0"
   },
   "plugins": [
     {
       "name": "rust-gpu-compute",
-      "description": "Helps developers write GPU-accelerated Rust code with proper patterns. Covers: branch divergence, memory transfer costs, Rust limitations on GPU (no heap allocation/recursion), memory coalescing, and GPU vs CPU场景选择. Based on VectorWare runtime model and WGSL best practices. Use for: boid simulation, particle systems, data-parallel processing, scientific computing, image processing, ML inference on GPU with Rust.",
-      "version": "0.1.0",
       "source": "./",
+      "description": "A Claude Code plugin that helps developers reason about Rust GPU compute, including branch divergence, transfer overhead, Rust-on-GPU limits, memory coalescing, and CPU-vs-GPU trade-offs.",
+      "version": "0.1.0",
       "author": {
         "name": "WeykonK"
       },
-      "skills": [
-        "./SKILL.md"
+      "homepage": "https://github.com/weykon/rust-gpu-compute",
+      "repository": "https://github.com/weykon/rust-gpu-compute",
+      "license": "MIT",
+      "keywords": [
+        "rust",
+        "gpu",
+        "wgpu",
+        "wgsl",
+        "compute",
+        "parallel",
+        "boids",
+        "vectorware"
+      ],
+      "category": "developer-tools",
+      "tags": [
+        "rust",
+        "gpu",
+        "wgpu",
+        "wgsl",
+        "compute",
+        "parallel"
       ]
     }
   ]

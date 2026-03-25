@@ -1,0 +1,20 @@
+{
+  "name": "rust-gpu-compute",
+  "description": "A Claude Code plugin for Rust GPU compute guidance, focused on GPU execution constraints, performance heuristics, and GPU-friendly Rust patterns.",
+  "author": {
+    "name": "WeykonK"
+  },
+  "homepage": "https://github.com/weykon/rust-gpu-compute",
+  "repository": "https://github.com/weykon/rust-gpu-compute",
+  "license": "MIT",
+  "keywords": [
+    "rust",
+    "gpu",
+    "wgpu",
+    "wgsl",
+    "compute",
+    "parallel",
+    "boids",
+    "vectorware"
+  ]
+}
