@@ -1,5 +1,7 @@
 # Rust GPU Compute Guide
 
+A qualitative guide for reasoning about Rust GPU compute trade-offs, workload fit, and GPU execution constraints.
+
 Choose a README version:
 
 - [English](./README_en.md)

@@ -13,6 +13,22 @@ This skill is based on a simple but important idea:
 
 If a runtime lets you express GPU work with Rust code, you still need to respect warp behavior, memory bandwidth, synchronization costs, and host↔device transfer overhead.
 
+This guide is qualitative rather than benchmark-driven. It is intended to help with reasoning and review, not to provide universal thresholds or hardware-independent performance guarantees.
+
+## Scope and non-goals
+
+This guide is mainly for qualitative reasoning and code review.
+
+It is intended to help answer questions like:
+- is this workload data-parallel enough to be a GPU candidate?
+- are transfer boundaries, memory layout, and control flow likely to dominate the result?
+- is a Rust-on-GPU runtime improving ergonomics without hiding the underlying execution model?
+
+It is not intended to claim:
+- a universal replacement for WGSL or shader programming in general
+- hardware-independent break-even thresholds
+- that all Rust concurrency abstractions map cleanly or efficiently to GPU execution
+
 ## Core constraints
 
 ### 1. Branch divergence
@@ -73,14 +89,14 @@ let result = gpu.download(&device_buffer);
 
 ### 3. Rust feature limits on GPU
 
-Depending on the stack or runtime, GPU-side Rust usually supports a restricted subset of the language.
+Depending on the stack, backend, and runtime, GPU-side Rust often supports a restricted subset of the language or makes some language features impractical in hot device code.
 
-Common limitations include:
-- no heap allocation on device
-- no recursion
-- no `unwrap()` / `panic!()` on device
-- limited or no dynamic-size abstractions
-- reduced `std` support
+Common limitations or pressure points include:
+- heap allocation is often unavailable, discouraged, or heavily constrained on device
+- recursion is often unsupported or undesirable
+- `unwrap()` / `panic!()` behavior is often unsupported, undesirable, or highly runtime-specific on device
+- dynamic-size abstractions may be limited or compile down poorly depending on the toolchain
+- `std` support is often reduced or replaced by a more restricted environment
 
 **Preferred mindset:**
 - preallocate buffers
@@ -115,16 +131,18 @@ Not every compute task should go to the GPU.
 
 | Workload | Best default |
 | --- | --- |
-| large map / reduce style transforms | GPU |
-| image processing / filters | GPU |
-| Monte Carlo simulation | GPU |
-| particle updates | GPU |
-| heavy branchy business logic | CPU |
-| tiny datasets (< ~1 MB heuristic) | CPU |
-| irregular pointer-chasing | CPU |
+| large map / reduce style transforms | often GPU |
+| image processing / filters | often GPU |
+| Monte Carlo simulation | often GPU |
+| particle updates | often GPU |
+| heavy branchy business logic | often CPU |
+| small, short-lived workloads with low arithmetic intensity | often CPU |
+| irregular pointer-chasing | often CPU |
 | nested, data-dependent control flow | usually CPU |
 
 ## VectorWare-style runtime vs WGSL vs a transpiler
+
+These categories are not interchangeable. They refer to different layers of the stack: shader authoring, code generation / compilation, and runtime execution model.
 
 ```text
 Traditional WGSL path
@@ -135,9 +153,13 @@ Rust host code -> Rust thread-like API -> runtime lowering -> GPU warp execution
 
 Rust-to-WGSL transpiler goal
 Rust compute DSL -> generated WGSL / SPIR-V -> GPU
+
+The point of this comparison is to separate layers, not to imply that all three approaches are equally mature, equally portable, or interchangeable in practice.
 ```
 
 ### What changes with a Rust runtime on top of the GPU?
+
+A VectorWare-style model should be read as one runtime approach, not as a universal replacement for shader programming. It can make some Rust concurrency patterns feel more natural, but it does not erase GPU-specific resource limits or performance trade-offs.
 
 You get:
 - a more familiar language surface
@@ -177,6 +199,8 @@ This is usually not GPU-friendly because it combines:
 - split the simulation into phases
 - use parallel reduction for shared aggregates
 - keep each kernel focused on one uniform step
+
+In practice, a scalable boids pipeline often looks more like: build grid -> index or sort -> neighbor pass -> integrate. The exact shape depends on the simulation size and memory budget, but naive all-pairs traversal stops scaling quickly.
 
 ## Recommended review flow
 

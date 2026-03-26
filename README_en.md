@@ -1,6 +1,22 @@
 # Rust GPU Compute Guide
 
-A Claude Code plugin and marketplace entry for reasoning about Rust GPU compute.
+A Claude Code plugin and marketplace entry for reasoning about Rust GPU compute trade-offs.
+
+This repository is a qualitative guide, not a benchmark suite. The guidance here is meant to help developers reason about workload fit, execution-model constraints, and memory behavior; exact break-even points depend on hardware, backend, runtime, and whether data already resides on the GPU.
+
+## Scope
+
+This repository helps with qualitative reasoning about:
+
+- when a Rust workload is GPU-friendly in the first place
+- which GPU execution-model constraints still matter even behind a Rust-flavored API
+- how to review data layout, transfer boundaries, and branch behavior before moving work to the GPU
+
+It does **not** claim to provide:
+
+- benchmark-backed break-even thresholds for every hardware setup
+- a universal replacement for shader programming
+- proof that every Rust concurrency pattern maps efficiently to GPU execution
 
 ## What it helps with
 
@@ -11,6 +27,7 @@ A Claude Code plugin and marketplace entry for reasoning about Rust GPU compute.
 - CPU vs GPU decision-making
 - boids, particle systems, image processing, and simulation workloads
 - VectorWare-style runtime thinking vs traditional WGSL workflows
+- clearer boundaries between runtime ergonomics, shader authoring, and compilation paths
 
 ## Repository structure
 

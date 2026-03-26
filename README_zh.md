@@ -1,6 +1,22 @@
 # Rust GPU Compute Guide
 
-一个面向 Claude Code 的插件与 marketplace 入口，用来帮助开发者判断 Rust GPU compute 场景是否合适，以及应该怎样写得更像 GPU 代码。
+一个面向 Claude Code 的插件与 marketplace 入口，用来帮助开发者判断 Rust GPU compute 的 trade-off、适用场景，以及 GPU 执行模型仍然带来的约束。
+
+这个仓库更像一份定性判断指南，不是 benchmark 仓库。里面的建议主要帮助你判断 workload fit、execution model 与 memory behavior；真正的 break-even point 仍然取决于硬件、backend、runtime，以及数据是否已经驻留在 GPU 上。
+
+## 适用范围
+
+这个仓库主要帮助你做定性判断：
+
+- 一个 Rust workload 在一开始是不是就适合放到 GPU
+- 即使用 Rust 风格 API 表达 GPU 工作，哪些 GPU execution model 约束依然存在
+- 在把工作迁到 GPU 之前，应该怎样检查 data layout、transfer boundary 与 branch behavior
+
+它**不主张**这些事情：
+
+- 给所有硬件环境都成立的 benchmark 式 break-even threshold
+- 把 shader programming 说成已经被统一替代
+- 证明所有 Rust concurrency pattern 都能高效映射到 GPU execution
 
 ## 主要覆盖内容
 
@@ -11,6 +27,7 @@
 - CPU / GPU 场景选择
 - boid、粒子系统、图像处理、仿真等 workload 的判断方式
 - VectorWare 风格 runtime 与传统 WGSL 工作流的区别
+- runtime ergonomics、shader authoring 与 compilation path 之间的边界
 
 ## 仓库结构
 
